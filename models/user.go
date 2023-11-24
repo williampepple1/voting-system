@@ -21,6 +21,7 @@ type User struct {
 	Username  string     `gorm:"unique" json:"username"`
 	Password  string     `json:"password"`
 	Zone      string     `json:"zone"`
+	Photo     string     `gorm:"type:varchar; null;" json:"photo_url"`
 	Role      RoleStatus `gorm:"type:varchar(20);not null;default:'voter'" json:"role"`
 	// Role
 	// Tasks     []Task    `gorm:"foreignkey:UserID"` // This indicates a one-to-many relationship
