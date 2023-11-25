@@ -1,9 +1,10 @@
 package models
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
-	"time"
 )
 
 type RoleStatus string
@@ -16,13 +17,13 @@ const (
 
 type User struct {
 	ID        uuid.UUID  `gorm:"type:uuid;primary_key;" json:"id"`
-	CreatedAt time.Time  `json:"created_at"`
-	UpdatedAt time.Time  `json:"updated_at"`
 	Username  string     `gorm:"unique" json:"username"`
 	Password  string     `json:"password"`
 	Zone      string     `json:"zone"`
 	Photo     string     `gorm:"type:varchar; null;" json:"photo_url"`
 	Role      RoleStatus `gorm:"type:varchar(20);not null;default:'voter'" json:"role"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt time.Time  `json:"updated_at"`
 
 	// Tasks     []Task    `gorm:"foreignkey:UserID"` // This indicates a one-to-many relationship
 }
