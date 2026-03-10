@@ -10,35 +10,31 @@ import (
 type RoleStatus string
 
 const (
-	StatusAdmin   RoleStatus = "owner"
-	StatusAuditor RoleStatus = "auditor"
-	StatusVoter   RoleStatus = "voter"
+	RoleOwner   RoleStatus = "owner"
+	RoleAuditor RoleStatus = "auditor"
+	RoleVoter   RoleStatus = "voter"
 )
 
 type User struct {
 	ID        uuid.UUID  `gorm:"type:uuid;primary_key;" json:"id"`
 	Username  string     `gorm:"unique" json:"username"`
-	Password  string     `json:"password"`
+	Password  string     `json:"-"`
 	Zone      string     `json:"zone"`
 	Photo     string     `gorm:"type:varchar; null;" json:"photo_url"`
 	Role      RoleStatus `gorm:"type:varchar(20);not null;default:'voter'" json:"role"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at"`
-
-	// Tasks     []Task    `gorm:"foreignkey:UserID"` // This indicates a one-to-many relationship
 }
 
-// BeforeCreate will set a UUID rather than numeric ID.
-func (base *User) BeforeCreate(tx *gorm.DB) (err error) {
-	base.ID = uuid.New()
-	currentTime := time.Now()
-	base.CreatedAt = currentTime
-	base.UpdatedAt = currentTime
+func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+	u.ID = uuid.New()
+	now := time.Now()
+	u.CreatedAt = now
+	u.UpdatedAt = now
 	return nil
 }
 
-// GORM V2 uses callbacks like BeforeUpdate to handle the update timestamp
-func (user *User) BeforeUpdate(tx *gorm.DB) (err error) {
-	user.UpdatedAt = time.Now()
-	return
+func (u *User) BeforeUpdate(tx *gorm.DB) (err error) {
+	u.UpdatedAt = time.Now()
+	return nil
 }
